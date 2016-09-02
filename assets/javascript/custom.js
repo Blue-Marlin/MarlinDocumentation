@@ -1,18 +1,26 @@
 $( document ).ready(function() {
-    $('#toc').toc({
-        'selectors':        (typeof  toc_selectors != 'undefined') ? toc_selectors : 'h1,h2,h3',
-        'activeClass':      'active',
-        'prefix':           'toc-',
-
-        'scrollToOffset':   75,
-        'highlightOffset':  50,
-
-        'itemClass': function(i, heading, $heading, prefix) {
-            //return 'custom-list-group-item ' + prefix + $heading[0].tagName.toLowerCase();;
-            return prefix + $heading[0].tagName.toLowerCase();;
-        }
+    /**
+     * Dynamically build the table of contents
+     */
+    $("#toc").tocify({
+        selectors: (typeof toc_selectors != 'undefined') ? toc_selectors : 'h1,h2,h3',
+        scrollTo: 65,
+        extendPage: false,
+        hashGenerator: 'pretty',
     });
 
-    // Hack tables, Jekyll's default table formating is awfull
-    $( 'table' ).addClass( 'table table-hover table-condensed custom-small-font' );
+    /**
+     * SEO optimization: mark all external link as nofollow
+     */
+    $('a:not(:has(img))').filter(function() {
+        return this.hostname && this.hostname !== location.hostname;
+    }).attr('target', '_blank').attr('rel', 'nofollow');
+
+    /**
+     * Activate all tooltip elements
+     */
+    $('[data-toggle="tooltip"]').tooltip();
+
+    // Hack tables, Jekyll's default table formating is awful
+    //$( 'table' ).addClass( 'table table-bordered table-hover' );
 });
